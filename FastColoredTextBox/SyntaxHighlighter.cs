@@ -8,8 +8,32 @@ using System.Xml;
 
 namespace FastColoredTextBoxNS
 {
-    public class SyntaxHighlighter : IDisposable
+
+    public interface ISyntaxHighlighter : IDisposable 
     {
+
+    }
+
+    public class SyntaxHighlighter : ISyntaxHighlighter
+    {
+        public Language Language { get; }
+
+        /// <summary>
+        /// Cache for SyntaxHighlighters
+        /// </summary>
+        private static Dictionary<Language, SyntaxHighlighter> Highlighters = new Dictionary<Language, SyntaxHighlighter>();
+
+        /// <summary>
+        /// Get or create a highlighter for a given language
+        /// </summary>
+        /// <param name="langue">Language to implement highlighter for</param>
+        /// <returns></returns>
+        public static SyntaxHighlighter GetHighlighter(Language language) {
+            if (!Highlighters.ContainsKey(language)) Highlighters[language] = new SyntaxHighlighter(language);
+            return Highlighters[language];
+        }
+
+
         //styles
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
         public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
@@ -118,8 +142,6 @@ namespace FastColoredTextBoxNS
         protected Regex VBNumberRegex;
         protected Regex VBStringRegex;
 
-        protected FastColoredTextBox currentTb;
-
         public static RegexOptions RegexCompiledOption
         {
             get
@@ -131,8 +153,9 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public SyntaxHighlighter(FastColoredTextBox currentTb) {
-            this.currentTb = currentTb;
+        public SyntaxHighlighter(Language language = Language.Custom) {
+            Language = language;
+            InitStyleSchema(Language);
         }
 
         #region IDisposable Members
@@ -388,12 +411,12 @@ namespace FastColoredTextBoxNS
 
         /// <summary>
         /// Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
-        /// based on a syntax descriptor that has been derived from a XML description file. In the run of the highlighting routine 
+        /// based on a syntax descriptor that has been derived from an XML description file. In the run of the highlighting routine 
         /// the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
         /// added afterwards and can be used anyway. 
         /// </summary>
         /// <param name="style">Style to add</param>
-        public virtual void AddResilientStyle(Style style)
+        public virtual void AddResilientStyle(FastColoredTextBox currentTb, Style style)
         {
             if (resilientStyles.Contains(style)) return;
             currentTb.CheckStylesBufferSize(); // Prevent buffer overflow

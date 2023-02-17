@@ -599,6 +599,18 @@
             the contents of this method with the code editor.
             </summary>
         </member>
+        <member name="F:FastColoredTextBoxNS.SyntaxHighlighter.Highlighters">
+            <summary>
+            Cache for SyntaxHighlighters
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language)">
+            <summary>
+            Get or create a highlighter for a given language
+            </summary>
+            <param name="langue">Language to implement highlighter for</param>
+            <returns></returns>
+        </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Language,FastColoredTextBoxNS.Range)">
             <summary>
             Highlights syntax for given language
@@ -621,10 +633,10 @@
             <param name="descriptionFileName">Name of the description file</param>
             <param name="doc">XmlDocument to parse</param>
         </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.Style)">
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.FastColoredTextBox,FastColoredTextBoxNS.Style)">
             <summary>
             Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
-            based on a syntax descriptor that has been derived from a XML description file. In the run of the highlighting routine 
+            based on a syntax descriptor that has been derived from an XML description file. In the run of the highlighting routine 
             the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
             added afterwards and can be used anyway. 
             </summary>
@@ -1410,6 +1422,11 @@
         <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ToolTipNeeded">
             <summary>
             Occurs when mouse is moving over text and tooltip is needed
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.DefaultMarkerSize">
+            <summary>
+            Default size of the markers
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ClearHints">

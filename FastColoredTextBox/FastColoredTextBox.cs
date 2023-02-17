@@ -81,7 +81,6 @@ namespace FastColoredTextBoxNS
         private bool isChanged;
         private bool isLineSelect;
         private bool isReplaceMode;
-        private Language language;
         private Keys lastModifiers;
         private Point lastMouseCoord;
         private DateTime lastNavigatedDateTime;
@@ -169,8 +168,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter(this);
-            language = Language.Custom;
+            SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language.Custom);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -1001,12 +999,12 @@ namespace FastColoredTextBoxNS
         [Description("Language for highlighting by built-in highlighter.")]
         public Language Language
         {
-            get { return language; }
-            set
-            {
-                language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
+            get { return SyntaxHighlighter.Language; }
+            set {
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value);
+                //language = value;
+                //if (SyntaxHighlighter != null)
+                //    SyntaxHighlighter.InitStyleSchema(language);
                 Invalidate();
             }
         }
@@ -4436,7 +4434,7 @@ namespace FastColoredTextBoxNS
             return true;
         }
 
-        #region AutoIndentChars
+#region AutoIndentChars
 
         /// <summary>
         /// Enables AutoIndentChars mode
@@ -4606,7 +4604,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        #endregion
+#endregion
 
         private bool DoAutocompleteBrackets(char c)
         {
@@ -5909,9 +5907,9 @@ namespace FastColoredTextBoxNS
         /// <returns>Line and char position</returns>
         public Place PointToPlace(Point point)
         {
-            #if debug
+#if debug
             var sw = Stopwatch.StartNew();
-            #endif
+#endif
             point.Offset(HorizontalScroll.Value, VerticalScroll.Value);
             point.Offset(-LeftIndent - Paddings.Left, 0);
             int iLine = YtoLineIndex(point.Y);
@@ -6090,7 +6088,7 @@ namespace FastColoredTextBoxNS
             //
 #if debug
             var sw = Stopwatch.StartNew();
-            #endif
+#endif
             CancelToolTip();
             ClearHints();
             IsChanged = true;
@@ -6154,7 +6152,7 @@ namespace FastColoredTextBoxNS
         {
 #if debug
             var sw = Stopwatch.StartNew();
-            #endif
+#endif
             //find folding markers for highlighting
             if (HighlightFoldingIndicator)
                 HighlightFoldings();
@@ -7262,9 +7260,9 @@ namespace FastColoredTextBoxNS
 
         public virtual void OnSyntaxHighlight(TextChangedEventArgs args)
         {
-            #if debug
+#if debug
             Stopwatch sw = Stopwatch.StartNew();
-            #endif
+#endif
 
             Range range;
 
@@ -7695,7 +7693,7 @@ window.status = ""#print"";
             ClearUndo();
         }
 
-        #region Drag and drop
+#region Drag and drop
 
         private bool IsDragDrop { get; set; }
 
@@ -8038,9 +8036,9 @@ window.status = ""#print"";
             base.OnDragLeave(e);
         }
 
-        #endregion
+#endregion
 
-        #region MiddleClickScrolling
+#region MiddleClickScrolling
 
         private bool middleClickScrollingActivated;
         private Point middleClickScrollingOriginPoint;
@@ -8237,10 +8235,10 @@ window.status = ""#print"";
             g.FillPolygon(brush, points);
         }
 
-        #endregion
+#endregion
 
 
-        #region Nested type: LineYComparer
+#region Nested type: LineYComparer
 
         private class LineYComparer : IComparer<LineInfo>
         {
@@ -8251,7 +8249,7 @@ window.status = ""#print"";
                 this.Y = Y;
             }
 
-            #region IComparer<LineInfo> Members
+#region IComparer<LineInfo> Members
 
             public int Compare(LineInfo x, LineInfo y)
             {
@@ -8261,10 +8259,10 @@ window.status = ""#print"";
                     return x.startY.CompareTo(Y);
             }
 
-            #endregion
+#endregion
         }
 
-        #endregion
+#endregion
     }
 
     public class PaintLineEventArgs : PaintEventArgs
