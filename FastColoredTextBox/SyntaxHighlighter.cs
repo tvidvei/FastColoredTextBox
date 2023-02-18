@@ -19,18 +19,26 @@ namespace FastColoredTextBoxNS
         public Language Language { get; }
 
         /// <summary>
-        /// Cache for SyntaxHighlighters
+        /// Xml-file with syntax description for Custom Highlighters
         /// </summary>
-        private static Dictionary<Language, SyntaxHighlighter> Highlighters = new Dictionary<Language, SyntaxHighlighter>();
+        public string DescriptionFile { get; }
+
+        public SyntaxDescriptor SyntaxDescriptor { get; }
 
         /// <summary>
-        /// Get or create a highlighter for a given language
+        /// Cache for SyntaxHighlighters
+        /// </summary>
+        private static Dictionary<(Language,string), SyntaxHighlighter> Highlighters = new Dictionary<(Language,string), SyntaxHighlighter>();
+
+        /// <summary>
+        /// Factory method: Get or create a highlighter for a given language
         /// </summary>
         /// <param name="langue">Language to implement highlighter for</param>
         /// <returns></returns>
-        public static SyntaxHighlighter GetHighlighter(Language language) {
-            if (!Highlighters.ContainsKey(language)) Highlighters[language] = new SyntaxHighlighter(language);
-            return Highlighters[language];
+        public static SyntaxHighlighter GetHighlighter(Language language = Language.None, string descriptionFile = null) {
+            if (descriptionFile != null && language != Language.Custom) descriptionFile = null;
+            if (!Highlighters.ContainsKey((language, descriptionFile))) Highlighters[(language,descriptionFile)] = new SyntaxHighlighter(language,descriptionFile);
+            return Highlighters[(language,descriptionFile)];
         }
 
 
@@ -46,9 +54,6 @@ namespace FastColoredTextBoxNS
         public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
         public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
-        //
-        protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
-            new Dictionary<string, SyntaxDescriptor>();
 
         protected readonly List<Style> resilientStyles = new List<Style>(5);
 
@@ -153,8 +158,25 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public SyntaxHighlighter(Language language = Language.Custom) {
+        internal SyntaxHighlighter(Language language = Language.None, string descriptionFile = null) {
             Language = language;
+
+            //Todo: Move into CustomSyntaxHighlighter
+            if (Language == Language.Custom) {
+                DescriptionFile = descriptionFile;
+                if (!string.IsNullOrWhiteSpace(DescriptionFile)) {
+                    var doc = new XmlDocument();
+                    string filepath = DescriptionFile;
+                    if (!File.Exists(filepath)) {
+                        filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filepath));
+                    }
+                    if (File.Exists(filepath)) {
+                        doc.LoadXml(File.ReadAllText(filepath));
+                        SyntaxDescriptor = ParseXmlDescription(doc);
+                    }
+                }
+            }
+
             InitStyleSchema(Language);
         }
 
@@ -162,8 +184,6 @@ namespace FastColoredTextBoxNS
 
         public void Dispose()
         {
-            foreach (SyntaxDescriptor desc in descByXMLfileNames.Values)
-                desc.Dispose();
         }
 
         #endregion
@@ -171,9 +191,9 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Highlights syntax for given language
         /// </summary>
-        public virtual void HighlightSyntax(Language language, Range range)
+        public virtual void HighlightSyntax(Range range)
         {
-            switch (language)
+            switch (Language)
             {
                 case Language.CSharp:
                     CSharpSyntaxHighlight(range);
@@ -202,31 +222,36 @@ namespace FastColoredTextBoxNS
                 case Language.JSON:
                     JSONSyntaxHighlight(range);
                     break;
+                case Language.Custom:
+                    HighlightSyntax(SyntaxDescriptor, range);
+                    break;
+                case Language.None:
+                    break;
                 default:
                     break;
             }
         }
 
-        /// <summary>
-        /// Highlights syntax for given XML description file
-        /// </summary>
-        public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
-        {
-            SyntaxDescriptor desc = null;
-            if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
-            {
-                var doc = new XmlDocument();
-                string file = XMLdescriptionFile;
-                if (!File.Exists(file))
-                    file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
+        ///// <summary>
+        ///// Highlights syntax for given XML description file
+        ///// </summary>
+        //public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
+        //{
+        //    SyntaxDescriptor desc = null;
+        //    if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
+        //    {
+        //        var doc = new XmlDocument();
+        //        string file = XMLdescriptionFile;
+        //        if (!File.Exists(file))
+        //            file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
 
-                doc.LoadXml(File.ReadAllText(file));
-                desc = ParseXmlDescription(doc);
-                descByXMLfileNames[XMLdescriptionFile] = desc;
-            }
+        //        doc.LoadXml(File.ReadAllText(file));
+        //        desc = ParseXmlDescription(doc);
+        //        descByXMLfileNames[XMLdescriptionFile] = desc;
+        //    }
 
-            HighlightSyntax(desc, range);
-        }
+        //    HighlightSyntax(desc, range);
+        //}
 
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
@@ -394,22 +419,6 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Uses the given <paramref name="doc"/> to parse a XML description and adds it as syntax descriptor. 
-        /// The syntax descriptor is used for highlighting when 
-        /// <list type="bullet">
-        ///     <item>Language property of FCTB is set to <see cref="Language.Custom"/></item>
-        ///     <item>DescriptionFile property of FCTB has the same value as the method parameter <paramref name="descriptionFileName"/></item>
-        /// </list>
-        /// </summary>
-        /// <param name="descriptionFileName">Name of the description file</param>
-        /// <param name="doc">XmlDocument to parse</param>
-        public virtual void AddXmlDescription(string descriptionFileName, XmlDocument doc)
-        {
-            SyntaxDescriptor desc = ParseXmlDescription(doc);
-            descByXMLfileNames[descriptionFileName] = desc;
-        }
-
-        /// <summary>
         /// Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
         /// based on a syntax descriptor that has been derived from an XML description file. In the run of the highlighting routine 
         /// the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
@@ -547,6 +556,7 @@ namespace FastColoredTextBoxNS
 
         public void HighlightSyntax(SyntaxDescriptor desc, Range range)
         {
+            if (desc == null) return;  // No syntax highlighting
             //set style order
             range.tb.ClearStylesBuffer();
             for (int i = 0; i < desc.styles.Count; i++)
@@ -1492,7 +1502,7 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public enum Language
     {
-        Custom,
+        None,
         CSharp,
         VB,
         HTML,
@@ -1501,6 +1511,7 @@ namespace FastColoredTextBoxNS
         PHP,
         JS,
         Lua,
-        JSON
+        JSON,
+        Custom
     }
 }

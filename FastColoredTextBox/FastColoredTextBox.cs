@@ -70,7 +70,6 @@ namespace FastColoredTextBoxNS
         private Color currentLineColor;
         private Cursor defaultCursor;
         private Range delayedTextChangedRange;
-        private string descriptionFile;
         private int endFoldingLine = -1;
         private Color foldingIndicatorColor;
         protected Dictionary<int, int> foldingPairs = new Dictionary<int, int>();
@@ -168,7 +167,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language.Custom);
+            SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language.None);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -992,29 +991,26 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Language for highlighting by built-in highlighter.
-        /// </summary>
-        [Browsable(true)]
-        [DefaultValue(typeof (Language), "Custom")]
-        [Description("Language for highlighting by built-in highlighter.")]
-        public Language Language
-        {
-            get { return SyntaxHighlighter.Language; }
-            set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value);
-                //language = value;
-                //if (SyntaxHighlighter != null)
-                //    SyntaxHighlighter.InitStyleSchema(language);
-                Invalidate();
-            }
-        }
-
-        /// <summary>
         /// Syntax Highlighter
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SyntaxHighlighter SyntaxHighlighter { get; set; }
+
+        /// <summary>
+        /// Language for highlighting by built-in highlighter.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(typeof (Language), "None")]
+        [Description("Language for highlighting by built-in highlighter.")]
+        public Language Language
+        {
+            get { return SyntaxHighlighter.Language; }
+            set {
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile);
+                Invalidate();
+            }
+        }
 
         /// <summary>
         /// XML file with description of syntax highlighting.
@@ -1028,10 +1024,9 @@ namespace FastColoredTextBoxNS
             )]
         public string DescriptionFile
         {
-            get { return descriptionFile; }
-            set
-            {
-                descriptionFile = value;
+            get { return SyntaxHighlighter.DescriptionFile; }
+            set {
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value);
                 Invalidate();
             }
         }
@@ -7279,13 +7274,7 @@ namespace FastColoredTextBoxNS
                     break;
             }
 
-            if (SyntaxHighlighter != null)
-            {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
-            }
+            SyntaxHighlighter?.HighlightSyntax(range);
 
 #if debug
             Console.WriteLine("OnSyntaxHighlight: "+ sw.ElapsedMilliseconds);

@@ -1,4 +1,6 @@
-﻿namespace Tester
+﻿using FastColoredTextBoxNS;
+
+namespace Tester
 {
     partial class SyntaxHighlightingByXmlDescription
     {
@@ -31,7 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter();
+            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.Custom, "htmlDesc.xml");
             this.SuspendLayout();
             // 
             // label1
@@ -49,7 +51,6 @@
             this.fctb.AutoScroll = true;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 176);
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctb.DescriptionFile = "htmlDesc.xml";
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.IsChanged = true;
             this.fctb.LeftBracket = '(';
@@ -79,7 +80,6 @@
             this.Name = "SyntaxHighlightingByXmlDescription";
             this.Text = "SyntaxHighlightingByXmlDescription";
             this.ResumeLayout(false);
-
         }
 
         #endregion
