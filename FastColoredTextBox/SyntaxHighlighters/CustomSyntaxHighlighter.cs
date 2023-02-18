@@ -4,72 +4,90 @@ using System.Text;
 
 namespace FastColoredTextBoxNS.SyntaxHighlighters {
 
+    [SyntaxHighlighter(Name = "None")]
+    public class NoneSyntaxHighlighter : SyntaxHighlighter {
+
+        public NoneSyntaxHighlighter(params object[] args) : base(Language.None) {
+        }
+
+    }
+
+    [SyntaxHighlighter(Name = "CSharp")]
     public class CSharpSyntaxHighlighter : SyntaxHighlighter {
 
-        public CSharpSyntaxHighlighter() : base(Language.CSharp) {
+        public CSharpSyntaxHighlighter(params object[] args) : base(Language.CSharp) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "VB")]
     public class VBSyntaxHighlighter : SyntaxHighlighter {
 
-        public VBSyntaxHighlighter() : base(Language.VB) {
+        public VBSyntaxHighlighter(params object[] args) : base(Language.VB) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "XML")]
     public class XMLSyntaxHighlighter : SyntaxHighlighter {
 
-        public XMLSyntaxHighlighter() : base(Language.XML) {
+        public XMLSyntaxHighlighter(params object[] args) : base(Language.XML) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "HTML")]
     public class HTMLSyntaxHighlighter : SyntaxHighlighter {
 
-        public HTMLSyntaxHighlighter() : base(Language.HTML) {
+        public HTMLSyntaxHighlighter(params object[] args) : base(Language.HTML) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "SQL")]
     public class SQLSyntaxHighlighter : SyntaxHighlighter {
 
-        public SQLSyntaxHighlighter() : base(Language.SQL) {
+        public SQLSyntaxHighlighter(params object[] args) : base(Language.SQL) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "PHP")]
     public class PHPSyntaxHighlighter : SyntaxHighlighter {
 
-        public PHPSyntaxHighlighter() : base(Language.PHP) {
+        public PHPSyntaxHighlighter(params object[] args) : base(Language.PHP) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "JS")]
     public class JSSyntaxHighlighter : SyntaxHighlighter {
 
-        public JSSyntaxHighlighter() : base(Language.JS) {
+        public JSSyntaxHighlighter(params object[] args) : base(Language.JS) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "JSON")]
     public class JSONSyntaxHighlighter : SyntaxHighlighter {
 
-        public JSONSyntaxHighlighter() : base(Language.JSON) {
+        public JSONSyntaxHighlighter(params object[] args) : base(Language.JSON) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "Lua")]
     public class LuaSyntaxHighlighter : SyntaxHighlighter {
 
-        public LuaSyntaxHighlighter() : base(Language.Lua) {
+        public LuaSyntaxHighlighter(params object[] args) : base(Language.Lua) {
         }
 
     }
 
+    [SyntaxHighlighter(Name = "Custom")]
     public class CustomSyntaxHighlighter : SyntaxHighlighter {
 
-        public CustomSyntaxHighlighter() : base(Language.Custom) {
+        public CustomSyntaxHighlighter(params object[] args) : base(Language.Custom, args[0] as string) {
         }
 
     }

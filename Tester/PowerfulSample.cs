@@ -133,15 +133,17 @@ namespace Tester
                     fctb.OnTextChanged();
                     break;
                 case "CSharp (built-in highlighter)": fctb.Language = Language.CSharp; break;
-                case "VB": fctb.Language = Language.VB; break;
-                case "HTML": fctb.Language = Language.HTML; break;
-                case "XML": fctb.Language = Language.XML; break;
-                case "SQL": fctb.Language = Language.SQL; break;
-                case "PHP": fctb.Language = Language.PHP; break;
-                case "JS": fctb.Language = Language.JS; break;
-                case "Lua": fctb.Language = Language.Lua; break;
-                case "JSON": fctb.Language = Language.JSON; break;
-                case "None": fctb.Language = Language.None; break;
+                //case "VB": fctb.Language = Language.VB; break;
+                //case "HTML": fctb.Language = Language.HTML; break;
+                //case "XML": fctb.Language = Language.XML; break;
+                //case "SQL": fctb.Language = Language.SQL; break;
+                //case "PHP": fctb.Language = Language.PHP; break;
+                //case "JS": fctb.Language = Language.JS; break;
+                //case "Lua": fctb.Language = Language.Lua; break;
+                //case "JSON": fctb.Language = Language.JSON; break;
+                //case "None": fctb.Language = Language.None; break;
+                default: fctb.Language = lang; break;
+
             }
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
@@ -418,4 +420,13 @@ namespace Tester
         }
 
     }
+
+    [SyntaxHighlighter(Name = "CSharp2")]
+    public class CSharp2SyntaxHighlighter : SyntaxHighlighter {
+
+        public CSharp2SyntaxHighlighter(params object[] args) : base("CSharp2") {
+        }
+
+    }
+
 }

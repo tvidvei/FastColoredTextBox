@@ -148,11 +148,13 @@
     struct Char
     {
         public char c;
+        public double Usage;
         public StyleIndex style;
 
         public Char(char c)
         {
             this.c = c;
+            Usage = 28.592;
             style = StyleIndex.None;
         }
     }

@@ -80,6 +80,7 @@ namespace Tester
             this.miChangeColors = new System.Windows.Forms.ToolStripMenuItem();
             this.changeHotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.cSharp2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
@@ -323,6 +324,7 @@ namespace Tester
             this.miLanguage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miCSharp,
             this.cSharpbuiltinHighlighterToolStripMenuItem,
+            this.cSharp2ToolStripMenuItem,
             this.miVB,
             this.hTMLToolStripMenuItem,
             this.xmlToolStripMenuItem,
@@ -468,7 +470,7 @@ namespace Tester
             this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
     "(?<range>:)\\s*(?<range>[^;]+);";
             this.fctb.AutoIndentExistingLines = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 285);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 315);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fctb.CharHeight = 15;
@@ -497,6 +499,13 @@ namespace Tester
             this.fctb.SelectionChangedDelayed += new System.EventHandler(this.fctb_SelectionChangedDelayed);
             this.fctb.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.fctb_AutoIndentNeeded);
             this.fctb.CustomAction += new System.EventHandler<FastColoredTextBoxNS.CustomActionEventArgs>(this.fctb_CustomAction);
+            // 
+            // cSharp2ToolStripMenuItem
+            // 
+            this.cSharp2ToolStripMenuItem.Name = "cSharp2ToolStripMenuItem";
+            this.cSharp2ToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.cSharp2ToolStripMenuItem.Text = "CSharp2";
+            this.cSharp2ToolStripMenuItem.Click += new System.EventHandler(this.miCSharp_Click);
             // 
             // PowerfulSample
             // 
@@ -568,6 +577,7 @@ namespace Tester
         private System.Windows.Forms.ToolStripMenuItem xmlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem jSONToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NoneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cSharp2ToolStripMenuItem;
     }
 }
 

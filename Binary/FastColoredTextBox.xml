@@ -599,22 +599,27 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.DescriptionFile">
-            <summary>
-            Xml-file with syntax description for Custom Highlighters
-            </summary>
-        </member>
         <member name="F:FastColoredTextBoxNS.SyntaxHighlighter.Highlighters">
             <summary>
             Cache for SyntaxHighlighters
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language,System.String)">
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.FindHighlighterType(System.Reflection.Assembly,System.String)">
             <summary>
-            Get or create a highlighter for a given language
+            Find a SyntaxHighlighter class with the given name in an assembly
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.GetHighlighter(System.String,System.String)">
+            <summary>
+            Factory method: Get or create a highlighter for a given language
             </summary>
             <param name="langue">Language to implement highlighter for</param>
             <returns></returns>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.DescriptionFile">
+            <summary>
+            Xml-file with syntax description for Custom Highlighters
+            </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
             <summary>
@@ -1203,6 +1208,12 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.DelayedTextChangedInterval">
             <summary>
             Minimal delay(ms) for TextChangedDelayed event.
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SyntaxHighlighterAssemblies">
+            <summary>
+            XML file with description of syntax highlighting.
+            This property works only with Language == Language.Custom.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SyntaxHighlighter">

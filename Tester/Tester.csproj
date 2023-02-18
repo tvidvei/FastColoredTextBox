@@ -306,6 +306,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AutocompleteSample.resx">
       <DependentUpon>AutocompleteSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AutocompleteSample2.resx">
       <DependentUpon>AutocompleteSample2.cs</DependentUpon>
@@ -331,6 +332,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomTextSourceSample2.resx">
       <DependentUpon>CustomTextSourceSample2.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomWordWrapSample.resx">
       <DependentUpon>CustomWordWrapSample.cs</DependentUpon>
@@ -342,6 +344,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DiffMergeSample.resx">
       <DependentUpon>DiffMergeSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DocumentMapSample.resx">
       <DependentUpon>DocumentMapSample.cs</DependentUpon>
@@ -407,6 +410,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Sandbox.resx">
       <DependentUpon>Sandbox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SimplestCodeFoldingSample.resx">
       <DependentUpon>SimplestCodeFoldingSample.cs</DependentUpon>
@@ -416,6 +420,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SplitSample.resx">
       <DependentUpon>SplitSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SyntaxHighlightingByXmlDescription.resx">
       <DependentUpon>SyntaxHighlightingByXmlDescription.cs</DependentUpon>

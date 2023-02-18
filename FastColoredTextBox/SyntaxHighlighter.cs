@@ -5,6 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Reflection;
+using System.Linq;
+using FastColoredTextBoxNS.SyntaxHighlighters;
 
 namespace FastColoredTextBoxNS
 {
@@ -14,9 +17,55 @@ namespace FastColoredTextBoxNS
 
     }
 
-    public class SyntaxHighlighter : ISyntaxHighlighter
-    {
-        public Language Language { get; }
+    public class SyntaxHighlighter : ISyntaxHighlighter {
+
+        /// <summary>
+        /// Cache for SyntaxHighlighters
+        /// </summary>
+        private static Dictionary<(Type, string), SyntaxHighlighter> Highlighters = new Dictionary<(Type, string), SyntaxHighlighter>();
+
+
+        /// <summary>
+        /// Find a SyntaxHighlighter class with the given name in an assembly
+        /// </summary>
+        private static Type FindHighlighterType(Assembly asm, string name) {
+            return asm?.GetExportedTypes().FirstOrDefault(t => t.GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) ?? false && t.IsAssignableFrom(typeof(ISyntaxHighlighter))) ?? null;
+        }
+
+        //private static Type FindHighlighterType(string assemblyNames, string name) {
+        //    var AsmNames = assemblyNames.Split("")
+
+        //}
+
+        /// <summary>
+        /// Factory method: Get or create a highlighter for a given language
+        /// </summary>
+        /// <param name="langue">Language to implement highlighter for</param>
+        /// <returns></returns>
+        public static SyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null) {
+            //string name = Convert.ToString(language); //Enum.GetName(typeof(Language), language);
+            var hltype = FindHighlighterType(Assembly.GetEntryAssembly(), name) ??
+                         FindHighlighterType(Assembly.GetCallingAssembly(), name) ??
+                         FindHighlighterType(Assembly.GetExecutingAssembly(), name) ??
+                         typeof(NoneSyntaxHighlighter);
+
+            if (descriptionFile != null && hltype != typeof(CustomSyntaxHighlighter)) descriptionFile = null;
+
+            if (!Highlighters.ContainsKey((hltype, descriptionFile))) {
+                // Find SyntaxHighlighter type
+                //var asm = Assembly.GetExecutingAssembly();
+                //Type HighlighterType = null;
+                //HighlighterType = asm.GetExportedTypes().FirstOrDefault(t => t.GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name == langName);
+                //if (HighlighterType == null) return Highlighters[(Language.None, null)];
+                Highlighters[(hltype, descriptionFile)] = Activator.CreateInstance(hltype, name, descriptionFile) as SyntaxHighlighter;
+                //Highlighters[(language, descriptionFile)] = new SyntaxHighlighter(language, descriptionFile);
+            }
+
+            return Highlighters[(hltype, descriptionFile)];
+        }
+
+
+        public string Name { get; }
 
         /// <summary>
         /// Xml-file with syntax description for Custom Highlighters
@@ -24,23 +73,6 @@ namespace FastColoredTextBoxNS
         public string DescriptionFile { get; }
 
         public SyntaxDescriptor SyntaxDescriptor { get; }
-
-        /// <summary>
-        /// Cache for SyntaxHighlighters
-        /// </summary>
-        private static Dictionary<(Language,string), SyntaxHighlighter> Highlighters = new Dictionary<(Language,string), SyntaxHighlighter>();
-
-        /// <summary>
-        /// Factory method: Get or create a highlighter for a given language
-        /// </summary>
-        /// <param name="langue">Language to implement highlighter for</param>
-        /// <returns></returns>
-        public static SyntaxHighlighter GetHighlighter(Language language = Language.None, string descriptionFile = null) {
-            if (descriptionFile != null && language != Language.Custom) descriptionFile = null;
-            if (!Highlighters.ContainsKey((language, descriptionFile))) Highlighters[(language,descriptionFile)] = new SyntaxHighlighter(language,descriptionFile);
-            return Highlighters[(language,descriptionFile)];
-        }
-
 
         //styles
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
@@ -158,11 +190,11 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        internal SyntaxHighlighter(Language language = Language.None, string descriptionFile = null) {
-            Language = language;
+        public SyntaxHighlighter(string name = Language.None, string descriptionFile = null) {
+            Name = name;
 
             //Todo: Move into CustomSyntaxHighlighter
-            if (Language == Language.Custom) {
+            if (Name == Language.Custom) {
                 DescriptionFile = descriptionFile;
                 if (!string.IsNullOrWhiteSpace(DescriptionFile)) {
                     var doc = new XmlDocument();
@@ -177,25 +209,27 @@ namespace FastColoredTextBoxNS
                 }
             }
 
-            InitStyleSchema(Language);
+            InitStyleSchema(Name);
         }
 
-        #region IDisposable Members
+#region IDisposable Members
 
         public void Dispose()
         {
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Highlights syntax for given language
         /// </summary>
         public virtual void HighlightSyntax(Range range)
         {
-            switch (Language)
+            switch (Name)
             {
                 case Language.CSharp:
+                case "CSharp2":
+                case "CSharp3":
                     CSharpSyntaxHighlight(range);
                     break;
                 case Language.VB:
@@ -256,7 +290,7 @@ namespace FastColoredTextBoxNS
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = (sender as FastColoredTextBox);
-            Language language = tb.Language;
+            string language = tb.Language;
             switch (language)
             {
                 case Language.CSharp:
@@ -606,7 +640,7 @@ namespace FastColoredTextBoxNS
             CSharpStringRegex =
                 new Regex(
                     @"
-                            # Character definitions:
+# Character definitions:
                             '
                             (?> # disable backtracking
                               (?:
@@ -616,19 +650,19 @@ namespace FastColoredTextBoxNS
                             )
                             '?
                             |
-                            # Normal string & verbatim strings definitions:
+# Normal string & verbatim strings definitions:
                             (?<verbatimIdentifier>@)?         # this group matches if it is an verbatim string
                             ""
                             (?> # disable backtracking
                               (?:
-                                # match and consume an escaped character including escaped double quote ("") char
+# match and consume an escaped character including escaped double quote ("") char
                                 (?(verbatimIdentifier)        # if it is a verbatim string ...
                                   """"|                         #   then: only match an escaped double quote ("") char
                                   \\.                         #   else: match an escaped sequence
                                 )
                                 | # OR
             
-                                # match any char except double quote char ("")
+# match any char except double quote char ("")
                                 [^""]
                               )*
                             )
@@ -652,7 +686,7 @@ namespace FastColoredTextBoxNS
                     RegexCompiledOption);
         }
 
-        public void InitStyleSchema(Language lang)
+        public void InitStyleSchema(string lang)
         {
             switch (lang)
             {
@@ -725,6 +759,24 @@ namespace FastColoredTextBoxNS
                     StringStyle = BrownStyle;
                     NumberStyle = MagentaStyle;
                     KeywordStyle = BlueStyle;
+                    break;
+                case "CSharp2":
+                    StringStyle = BrownStyle;
+                    CommentStyle = GreenStyle;
+                    NumberStyle = MaroonStyle;
+                    AttributeStyle = GreenStyle;
+                    ClassNameStyle = MaroonStyle;
+                    KeywordStyle = BlueStyle;
+                    CommentTagStyle = GrayStyle;
+                    break;
+                case "CSharp3":
+                    StringStyle = BrownStyle;
+                    CommentStyle = GreenStyle;
+                    NumberStyle = GrayStyle;
+                    AttributeStyle = GreenStyle;
+                    ClassNameStyle = BlackStyle;
+                    KeywordStyle = BlueStyle;
+                    CommentTagStyle = GrayStyle;
                     break;
             }
         }
@@ -1377,7 +1429,7 @@ namespace FastColoredTextBoxNS
             range.SetFoldingMarkers(@"\[", @"\]"); //allow to collapse comment block
         }
 
-        #region Styles
+#region Styles
 
         /// <summary>
         /// String style
@@ -1494,24 +1546,24 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public Style TypesStyle { get; set; }
 
-        #endregion
+#endregion
     }
 
     /// <summary>
     /// Language
     /// </summary>
-    public enum Language
-    {
-        None,
-        CSharp,
-        VB,
-        HTML,
-        XML,
-        SQL,
-        PHP,
-        JS,
-        Lua,
-        JSON,
-        Custom
+    public static class Language {
+        public const string None = "None";
+        public const string CSharp = "CSharp";
+        public const string VB = "VB";
+        public const string HTML = "HTML";
+        public const string XML = "XML";
+        public const string SQL = "SQL";
+        public const string PHP = "PHP";
+        public const string JS = "JS";
+        public const string Lua = "Lua";
+        public const string JSON = "JSON";
+        public const string Custom = "Custom";
     }
+
 }
