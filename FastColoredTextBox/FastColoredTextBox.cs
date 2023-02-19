@@ -1002,7 +1002,7 @@ namespace FastColoredTextBoxNS
         [Description(
             "Library (Assembly) containing SyntaxHighlighter classes to be used. Either short or long form of the assemblyName"
             )]
-        public string SyntaxHighlighterAssemblies {
+        public string SyntaxHighlighterLibrary {
             get { return syntaxHighlighterLibrary; }
             set {
                 syntaxHighlighterLibrary = value;
@@ -1028,7 +1028,7 @@ namespace FastColoredTextBoxNS
         {
             get { return SyntaxHighlighter.Name; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, SyntaxHighlighterAssemblies);
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, SyntaxHighlighterLibrary);
                 Invalidate();
             }
         }
@@ -1047,7 +1047,7 @@ namespace FastColoredTextBoxNS
         {
             get { return SyntaxHighlighter.DescriptionFile; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value, SyntaxHighlighterAssemblies);
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value, SyntaxHighlighterLibrary);
                 Invalidate();
             }
         }
