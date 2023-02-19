@@ -599,6 +599,11 @@
             the contents of this method with the code editor.
             </summary>
         </member>
+        <member name="T:FastColoredTextBoxNS.Language">
+            <summary>
+            Languages.  (Used as short names for the predefined SyntaxHighlighter classes)
+            </summary>
+        </member>
         <member name="F:FastColoredTextBoxNS.SyntaxHighlighter.Highlighters">
             <summary>
             Cache for SyntaxHighlighters
@@ -623,71 +628,8 @@
         </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
             <summary>
-            Highlights syntax for given language
+            Highlights syntax
             </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.FastColoredTextBox,FastColoredTextBoxNS.Style)">
-            <summary>
-            Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
-            based on a syntax descriptor that has been derived from an XML description file. In the run of the highlighting routine 
-            the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
-            added afterwards and can be used anyway. 
-            </summary>
-            <param name="style">Style to add</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.CSharpSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights C# code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.VBSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights VB code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HTMLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights HTML code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.XMLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights XML code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.SQLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights SQL code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.PHPSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights PHP code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.JScriptSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights JavaScript code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.LuaSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights Lua code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.JSONSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights JSON code
-            </summary>
-            <param name="range"></param>
         </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StringStyle">
             <summary>
@@ -804,10 +746,14 @@
             SQL Types style
             </summary>
         </member>
-        <member name="T:FastColoredTextBoxNS.Language">
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.FastColoredTextBox,FastColoredTextBoxNS.Style)">
             <summary>
-            Language
+            Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
+            based on a syntax descriptor that has been derived from an XML description file. In the run of the highlighting routine 
+            the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
+            added afterwards and can be used anyway. 
             </summary>
+            <param name="style">Style to add</param>
         </member>
         <member name="F:FastColoredTextBoxNS.ReplaceForm.components">
             <summary>
@@ -3193,6 +3139,60 @@
             <summary>
             Uses an Xml description file to configure the highlighting
             </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.CSharpSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights C# code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HTMLSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights HTML code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.JSONSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights JSON code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.JSSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights JavaScript code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.LuaSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights Lua code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.PHPSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights PHP code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.SQLSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights SQL code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.VBSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights VB code
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.XMLSyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights XML code
+            </summary>
+            <param name="range"></param>
         </member>
         <member name="T:FastColoredTextBoxNS.TextSource">
             <summary>

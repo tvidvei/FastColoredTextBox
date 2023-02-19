@@ -53,7 +53,7 @@ namespace Tester
 
             if (fctb.Text.Trim().StartsWith("<?xml"))
             {
-                fctb.Language = Language.XML;
+                fctb.Language = "XML";
 
                 fctb.ClearStylesBuffer();
                 fctb.Range.ClearStyle(StyleIndex.All);

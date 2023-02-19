@@ -111,7 +111,17 @@
     <Compile Include="Range.cs" />
     <Compile Include="Style.cs" />
     <Compile Include="SyntaxHighlighterAttribute.cs" />
+    <Compile Include="SyntaxHighlighters\CSharpSyntaxHighlighter.cs" />
     <Compile Include="SyntaxHighlighters\CustomSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\HTMLSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\JSONSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\JSSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\LuaSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\NoneSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\PHPSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\SQLSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\VBSyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighters\XMLSyntaxHighlighter.cs" />
     <Compile Include="TextSource.cs" />
     <Compile Include="TypeDescriptor.cs" />
     <Compile Include="FileTextSource.cs" />

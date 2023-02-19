@@ -4766,11 +4766,12 @@ Either short or long form of the assembly names separated by ';'. "
 
 
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
-            if (calculator == null)
-                if (Language != FastColoredTextBoxNS.Language.Custom && Highlighter != null)
+            if (calculator == null) {
+                if (Highlighter != null)
                     calculator = Highlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;
+            }
 
             int needSpaces = 0;
 
