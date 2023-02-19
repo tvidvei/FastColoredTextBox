@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FastColoredTextBoxNS.SyntaxHighlighters {
+namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "None")]
     public class NoneSyntaxHighlighter : SyntaxHighlighter {
@@ -84,7 +84,7 @@ namespace FastColoredTextBoxNS.SyntaxHighlighters {
 
     }
 
-    [SyntaxHighlighter(Name = "Custom")]
+    [SyntaxHighlighter(Name = "Custom", IsConfigurable = true)]
     public class CustomSyntaxHighlighter : SyntaxHighlighter {
 
         public CustomSyntaxHighlighter(params object[] args) : base(Language.Custom, args[0] as string) {

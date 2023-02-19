@@ -35,7 +35,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using FastColoredTextBoxNS.SyntaxHighlighters;
 using Microsoft.Win32;
 using Timer = System.Windows.Forms.Timer;
 
@@ -991,21 +990,22 @@ namespace FastColoredTextBoxNS
             set { timer2.Interval = value; }
         }
 
-        private string highlighterLibrary = null;
+        private string highlighterLibraries = null;
 
         /// <summary>
-        /// XML file with description of syntax highlighting.
-        /// This property works only with Language == Language.Custom.
+        /// Library (Assembly) containing SyntaxHighlighter classes to be used. 
+        /// Either short or long form of the assembly names, separated by ';'.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(null)]
         [Description(
-            "Library (Assembly) containing SyntaxHighlighter classes to be used. Either short or long form of the assemblyName"
+            @"List of Libraries (Assemblies) to search for ISyntaxHighlighter classes. 
+Either short or long form of the assembly names separated by ';'. "
             )]
-        public string HighlighterLibrary {
-            get { return highlighterLibrary; }
+        public string HighlighterLibraries {
+            get { return highlighterLibraries; }
             set {
-                highlighterLibrary = value;
+                highlighterLibraries = value;
                 Highlighter = SyntaxHighlighter.GetHighlighter(Language, DescriptionFile, value);
                 Invalidate();
             }
@@ -1034,7 +1034,7 @@ namespace FastColoredTextBoxNS
         {
             get { return Highlighter.Name; }
             set {
-                Highlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, HighlighterLibrary);
+                Highlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, HighlighterLibraries);
                 Invalidate();
             }
         }
@@ -1053,7 +1053,7 @@ namespace FastColoredTextBoxNS
         {
             get { return Highlighter.DescriptionFile; }
             set {
-                Highlighter = SyntaxHighlighter.GetHighlighter(Language, value, HighlighterLibrary);
+                Highlighter = SyntaxHighlighter.GetHighlighter(Language, value, HighlighterLibraries);
                 Invalidate();
             }
         }

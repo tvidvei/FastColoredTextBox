@@ -1210,10 +1210,10 @@
             Minimal delay(ms) for TextChangedDelayed event.
             </summary>
         </member>
-        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.HighlighterLibrary">
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.HighlighterLibraries">
             <summary>
-            XML file with description of syntax highlighting.
-            This property works only with Language == Language.Custom.
+            Library (Assembly) containing SyntaxHighlighter classes to be used. 
+            Either short or long form of the assembly names, separated by ';'.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Highlighter">
@@ -3188,6 +3188,11 @@
             This style is used to mark range of text as ReadOnly block
             </summary>
             <remarks>You can inherite this style to add visual effects of readonly text</remarks>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighterAttribute.IsConfigurable">
+            <summary>
+            Uses an Xml description file to configure the highlighting
+            </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.TextSource">
             <summary>

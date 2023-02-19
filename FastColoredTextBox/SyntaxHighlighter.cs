@@ -7,7 +7,8 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Reflection;
 using System.Linq;
-using FastColoredTextBoxNS.SyntaxHighlighters;
+using System.Runtime.InteropServices;
+using System.Xml.Schema;
 
 namespace FastColoredTextBoxNS
 {
@@ -30,7 +31,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Cache for SyntaxHighlighters
         /// </summary>
-        private static Dictionary<(Type, string), SyntaxHighlighter> Highlighters = new Dictionary<(Type, string), SyntaxHighlighter>();
+        private static Dictionary<(string, string, string), ISyntaxHighlighter> Highlighters = new Dictionary<(string, string, string), ISyntaxHighlighter>();
 
 
         /// <summary>
@@ -40,44 +41,52 @@ namespace FastColoredTextBoxNS
             return asm?.GetExportedTypes().FirstOrDefault(t => t.GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) ?? false && t.IsAssignableFrom(typeof(ISyntaxHighlighter))) ?? null;
         }
 
-        //private static Type FindHighlighterType(string assemblyNames, string name) {
-        //    var AsmNames = assemblyNames.Split("")
-
-        //}
-
         /// <summary>
         /// Factory method: Get or create a highlighter for a given language
         /// </summary>
         /// <param name="langue">Language to implement highlighter for</param>
         /// <returns></returns>
-        public static ISyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null, string library = null) {
-            //string name = Convert.ToString(language); //Enum.GetName(typeof(Language), language);
-            Assembly asm = null;
-            //library = "Highlighters";
-            try {
-                if (!String.IsNullOrWhiteSpace(library)) asm = Assembly.Load(library);
-            } catch (Exception ex) {
-                asm = null;
+        public static ISyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null, string libraries = null) {
+            ISyntaxHighlighter result;
+
+            if (!Highlighters.TryGetValue((name, "*", libraries), out result)) {
+                if (!Highlighters.TryGetValue((name, descriptionFile, libraries), out result)) {
+                    // Find SyntaxHighlighter type
+                    Type hltype = null;
+                    if (!String.IsNullOrWhiteSpace(libraries)) {
+                        // First, search for hltype in libraries
+                        var libA = libraries.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
+                        foreach (var library in libA) {
+                            Assembly asm = null;
+                            try {
+                                if (!String.IsNullOrWhiteSpace(library)) asm = Assembly.Load(library);
+                            } catch (Exception ex) {
+                                asm = null;
+                            }
+                            hltype = FindHighlighterType(asm, name);
+                            if (hltype != null) break;
+                        }
+                    }
+
+                    if (hltype == null) {
+                        hltype = FindHighlighterType(Assembly.GetEntryAssembly(), name) ??
+                                 FindHighlighterType(Assembly.GetCallingAssembly(), name) ??
+                                 FindHighlighterType(Assembly.GetExecutingAssembly(), name) ??
+                                 typeof(NoneSyntaxHighlighter);
+                    }
+
+                    if (hltype.GetCustomAttribute<SyntaxHighlighterAttribute>().IsConfigurable) {
+                        result = Activator.CreateInstance(hltype, name, descriptionFile) as SyntaxHighlighter;
+                        Highlighters[(name, descriptionFile, libraries)] = result;
+                    } else {
+                        result = Activator.CreateInstance(hltype, name) as SyntaxHighlighter;
+                        Highlighters[(name, "*", libraries)] = result;
+                    }
+
+                }
             }
-            var hltype = FindHighlighterType(asm, name) ??
-                         FindHighlighterType(Assembly.GetEntryAssembly(), name) ??
-                         FindHighlighterType(Assembly.GetCallingAssembly(), name) ??
-                         FindHighlighterType(Assembly.GetExecutingAssembly(), name) ??
-                         typeof(NoneSyntaxHighlighter);
 
-            if (descriptionFile != null && hltype != typeof(CustomSyntaxHighlighter)) descriptionFile = null;
-
-            if (!Highlighters.ContainsKey((hltype, descriptionFile))) {
-                // Find SyntaxHighlighter type
-                //var asm = Assembly.GetExecutingAssembly();
-                //Type HighlighterType = null;
-                //HighlighterType = asm.GetExportedTypes().FirstOrDefault(t => t.GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name == langName);
-                //if (HighlighterType == null) return Highlighters[(Language.None, null)];
-                Highlighters[(hltype, descriptionFile)] = Activator.CreateInstance(hltype, name, descriptionFile) as SyntaxHighlighter;
-                //Highlighters[(language, descriptionFile)] = new SyntaxHighlighter(language, descriptionFile);
-            }
-
-            return Highlighters[(hltype, descriptionFile)];
+            return result;
         }
 
 

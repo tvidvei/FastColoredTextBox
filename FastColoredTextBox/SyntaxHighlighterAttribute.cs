@@ -11,6 +11,11 @@ namespace FastColoredTextBoxNS {
         
         public string Name { get; set; }
 
+        /// <summary>
+        /// Uses an Xml description file to configure the highlighting
+        /// </summary>
+        public bool IsConfigurable { get; set; } = false;
+
         public SyntaxHighlighterAttribute() { }
 
     }
