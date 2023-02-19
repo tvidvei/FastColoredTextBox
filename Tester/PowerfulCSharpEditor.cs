@@ -100,7 +100,7 @@ namespace Tester
         {
             //---block autocomplete menu for comments
             //get index of green style (used for comments)
-            var iGreenStyle = CurrentTB.GetStyleIndex(CurrentTB.SyntaxHighlighter.GreenStyle);
+            var iGreenStyle = CurrentTB.GetStyleIndex(CurrentTB.HighlighterBase.GreenStyle);
             if (iGreenStyle >= 0)
                 if (CurrentTB.Selection.Start.iChar > 0)
                 {

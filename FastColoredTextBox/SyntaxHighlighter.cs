@@ -15,6 +15,14 @@ namespace FastColoredTextBoxNS
     public interface ISyntaxHighlighter : IDisposable 
     {
 
+        string Name { get; }
+
+        string DescriptionFile { get; }
+
+        void HighlightSyntax(Range range);
+
+        void AutoIndentNeeded(object sender, AutoIndentEventArgs args);
+
     }
 
     public class SyntaxHighlighter : ISyntaxHighlighter {
@@ -42,7 +50,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         /// <param name="langue">Language to implement highlighter for</param>
         /// <returns></returns>
-        public static SyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null, string library = null) {
+        public static ISyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null, string library = null) {
             //string name = Convert.ToString(language); //Enum.GetName(typeof(Language), language);
             Assembly asm = null;
             //library = "Highlighters";

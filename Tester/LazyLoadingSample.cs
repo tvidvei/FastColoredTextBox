@@ -56,8 +56,8 @@ namespace Tester
             range.SetFoldingMarkers(@"N\d\d00", @"N\d\d99");
             //
             range.ClearStyle(StyleIndex.All);
-            range.SetStyle(fctb.SyntaxHighlighter.BlueStyle, @"N\d+");
-            range.SetStyle(fctb.SyntaxHighlighter.RedStyle, @"[+\-]?[\d\.]+\d+");
+            range.SetStyle(fctb.HighlighterBase.BlueStyle, @"N\d+");
+            range.SetStyle(fctb.HighlighterBase.RedStyle, @"[+\-]?[\d\.]+\d+");
         }
 
         private void closeFileToolStripMenuItem_Click(object sender, EventArgs e)

@@ -33,7 +33,7 @@ namespace Tester
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.Custom, "htmlDesc.xml");
+            ISyntaxHighlighter syntaxHighlighter1 = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.Custom, "htmlDesc.xml");
             this.SuspendLayout();
             // 
             // label1
@@ -60,7 +60,7 @@ namespace Tester
             this.fctb.SelectedText = "";
             this.fctb.SelectionStart = 373;
             this.fctb.Size = new System.Drawing.Size(370, 275);
-            this.fctb.SyntaxHighlighter = syntaxHighlighter1;
+            this.fctb.Highlighter = syntaxHighlighter1;
             this.fctb.TabIndex = 4;
             this.fctb.Text = @"<div class=""clip5x9 nav_arrows"">
       <img src=""http://i3.msdn.microsoft.com/Hash/0f73868cd340280cac28f7eeb3d2dd7d.png"" class=""cl_nav_arrow"" alt="""" />

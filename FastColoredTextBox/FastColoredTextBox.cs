@@ -168,7 +168,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.None);
+            Highlighter = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.None);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -991,7 +991,7 @@ namespace FastColoredTextBoxNS
             set { timer2.Interval = value; }
         }
 
-        private string syntaxHighlighterLibrary = null;
+        private string highlighterLibrary = null;
 
         /// <summary>
         /// XML file with description of syntax highlighting.
@@ -1002,11 +1002,11 @@ namespace FastColoredTextBoxNS
         [Description(
             "Library (Assembly) containing SyntaxHighlighter classes to be used. Either short or long form of the assemblyName"
             )]
-        public string SyntaxHighlighterLibrary {
-            get { return syntaxHighlighterLibrary; }
+        public string HighlighterLibrary {
+            get { return highlighterLibrary; }
             set {
-                syntaxHighlighterLibrary = value;
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, DescriptionFile, value);
+                highlighterLibrary = value;
+                Highlighter = SyntaxHighlighter.GetHighlighter(Language, DescriptionFile, value);
                 Invalidate();
             }
         }
@@ -1016,7 +1016,13 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SyntaxHighlighter SyntaxHighlighter { get; set; }
+        public ISyntaxHighlighter Highlighter { get; set; }
+
+        /// <summary>
+        /// Ad-hoc solution to have Test-cases to work until updated
+        /// Todo: To be removed when issues with testcases are solved
+        /// </summary>
+        public SyntaxHighlighter HighlighterBase => Highlighter as SyntaxHighlighter;
 
         /// <summary>
         /// Language for highlighting by built-in highlighter.
@@ -1026,9 +1032,9 @@ namespace FastColoredTextBoxNS
         [Description("Language for highlighting by built-in highlighter.")]
         public string Language
         {
-            get { return SyntaxHighlighter.Name; }
+            get { return Highlighter.Name; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, SyntaxHighlighterLibrary);
+                Highlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, HighlighterLibrary);
                 Invalidate();
             }
         }
@@ -1045,9 +1051,9 @@ namespace FastColoredTextBoxNS
             )]
         public string DescriptionFile
         {
-            get { return SyntaxHighlighter.DescriptionFile; }
+            get { return Highlighter.DescriptionFile; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value, SyntaxHighlighterLibrary);
+                Highlighter = SyntaxHighlighter.GetHighlighter(Language, value, HighlighterLibrary);
                 Invalidate();
             }
         }
@@ -4761,8 +4767,8 @@ namespace FastColoredTextBoxNS
 
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
             if (calculator == null)
-                if (Language != FastColoredTextBoxNS.Language.Custom && SyntaxHighlighter != null)
-                    calculator = SyntaxHighlighter.AutoIndentNeeded;
+                if (Language != FastColoredTextBoxNS.Language.Custom && Highlighter != null)
+                    calculator = Highlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;
 
@@ -7295,7 +7301,7 @@ namespace FastColoredTextBoxNS
                     break;
             }
 
-            SyntaxHighlighter?.HighlightSyntax(range);
+            Highlighter?.HighlightSyntax(range);
 
 #if debug
             Console.WriteLine("OnSyntaxHighlight: "+ sw.ElapsedMilliseconds);
@@ -7456,8 +7462,8 @@ window.status = ""#print"";
             base.Dispose(disposing);
             if (disposing)
             {
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.Dispose();
+                if (Highlighter != null)
+                    Highlighter.Dispose();
                 timer.Dispose();
                 timer2.Dispose();
                 middleClickScrollingTimer.Dispose();

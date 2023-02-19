@@ -354,14 +354,24 @@ namespace Tester
 
         private void miChangeColors_Click(object sender, EventArgs e)
         {
-            var styles = new Style[] { fctb.SyntaxHighlighter.BlueBoldStyle, fctb.SyntaxHighlighter.BlueStyle, fctb.SyntaxHighlighter.BoldStyle, fctb.SyntaxHighlighter.BrownStyle, fctb.SyntaxHighlighter.GrayStyle, fctb.SyntaxHighlighter.GreenStyle, fctb.SyntaxHighlighter.MagentaStyle, fctb.SyntaxHighlighter.MaroonStyle, fctb.SyntaxHighlighter.RedStyle };
-            fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
+            var styles = new Style[] { 
+                fctb.HighlighterBase.BlueBoldStyle, 
+                fctb.HighlighterBase.BlueStyle, 
+                fctb.HighlighterBase.BoldStyle, 
+                fctb.HighlighterBase.BrownStyle, 
+                fctb.HighlighterBase.GrayStyle, 
+                fctb.HighlighterBase.GreenStyle, 
+                fctb.HighlighterBase.MagentaStyle, 
+                fctb.HighlighterBase.MaroonStyle, 
+                fctb.HighlighterBase.RedStyle 
+            };
+            fctb.HighlighterBase.AttributeStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.ClassNameStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.CommentStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.CommentTagStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.KeywordStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.NumberStyle = styles[rnd.Next(styles.Length)];
+            fctb.HighlighterBase.StringStyle = styles[rnd.Next(styles.Length)];
 
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
         }

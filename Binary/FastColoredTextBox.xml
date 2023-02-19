@@ -1210,15 +1210,21 @@
             Minimal delay(ms) for TextChangedDelayed event.
             </summary>
         </member>
-        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SyntaxHighlighterLibrary">
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.HighlighterLibrary">
             <summary>
             XML file with description of syntax highlighting.
             This property works only with Language == Language.Custom.
             </summary>
         </member>
-        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SyntaxHighlighter">
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Highlighter">
             <summary>
             Syntax Highlighter
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.HighlighterBase">
+            <summary>
+            Ad-hoc solution to have Test-cases to work until updated
+            Todo: To be removed when issues with testcases are solved
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Language">

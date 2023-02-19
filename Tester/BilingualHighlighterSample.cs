@@ -23,8 +23,8 @@ namespace Tester
             var tb = (FastColoredTextBox) sender;
             
             //highlight html
-            tb.SyntaxHighlighter.InitStyleSchema(Language.HTML);
-            tb.SyntaxHighlighter.HTMLSyntaxHighlight(tb.Range);
+            tb.HighlighterBase.InitStyleSchema(Language.HTML);
+            tb.HighlighterBase.HTMLSyntaxHighlight(tb.Range);
             tb.Range.ClearFoldingMarkers();
             //find PHP fragments
             foreach(var r in tb.GetRanges(@"<\?php.*?\?>", RegexOptions.Singleline))
@@ -32,8 +32,8 @@ namespace Tester
                 //remove HTML highlighting from this fragment
                 r.ClearStyle(StyleIndex.All);
                 //do PHP highlighting
-                tb.SyntaxHighlighter.InitStyleSchema(Language.PHP);
-                tb.SyntaxHighlighter.PHPSyntaxHighlight(r);
+                tb.HighlighterBase.InitStyleSchema(Language.PHP);
+                tb.HighlighterBase.PHPSyntaxHighlight(r);
             }
         }
     }
