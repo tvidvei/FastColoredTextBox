@@ -13,18 +13,25 @@ namespace Tester
 {
     public partial class BilingualHighlighterSample : Form
     {
+        private ISyntaxHighlighter HTMLHighlighter;
+
+        private ISyntaxHighlighter PHPHighlighter;
+
         public BilingualHighlighterSample()
         {
             InitializeComponent();
+
+            HTMLHighlighter = SyntaxHighlighter.GetHighlighter("HTML");
+            PHPHighlighter = SyntaxHighlighter.GetHighlighter("PHP");
         }
+
 
         private void tb_TextChangedDelayed(object sender, TextChangedEventArgs e)
         {
             var tb = (FastColoredTextBox) sender;
-            
+
             //highlight html
-            tb.HighlighterBase.InitStyleSchema(Language.HTML);
-            tb.HighlighterBase.HTMLSyntaxHighlight(tb.Range);
+            HTMLHighlighter.HighlightSyntax(tb.Range);
             tb.Range.ClearFoldingMarkers();
             //find PHP fragments
             foreach(var r in tb.GetRanges(@"<\?php.*?\?>", RegexOptions.Singleline))
@@ -32,8 +39,7 @@ namespace Tester
                 //remove HTML highlighting from this fragment
                 r.ClearStyle(StyleIndex.All);
                 //do PHP highlighting
-                tb.HighlighterBase.InitStyleSchema(Language.PHP);
-                tb.HighlighterBase.PHPSyntaxHighlight(r);
+                PHPHighlighter.HighlightSyntax(r);
             }
         }
     }
