@@ -24,9 +24,20 @@ namespace FastColoredTextBoxNS
 
         void AutoIndentNeeded(object sender, AutoIndentEventArgs args);
 
+        void InitStyleSchema();
+
     }
 
-    public class SyntaxHighlighter : ISyntaxHighlighter {
+    public abstract class SyntaxHighlighter : ISyntaxHighlighter {
+
+        public static RegexOptions RegexCompiledOption {
+            get {
+                if (platformType == Platform.X86)
+                    return RegexOptions.Compiled;
+                else
+                    return RegexOptions.None;
+            }
+        }
 
         /// <summary>
         /// Cache for SyntaxHighlighters
@@ -76,10 +87,10 @@ namespace FastColoredTextBoxNS
                     }
 
                     if (hltype.GetCustomAttribute<SyntaxHighlighterAttribute>().IsConfigurable) {
-                        result = Activator.CreateInstance(hltype, name, descriptionFile) as SyntaxHighlighter;
+                        result = Activator.CreateInstance(hltype, descriptionFile) as SyntaxHighlighter;
                         Highlighters[(name, descriptionFile, libraries)] = result;
                     } else {
-                        result = Activator.CreateInstance(hltype, name) as SyntaxHighlighter;
+                        result = Activator.CreateInstance(hltype) as SyntaxHighlighter;
                         Highlighters[(name, "*", libraries)] = result;
                     }
 
@@ -95,9 +106,10 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Xml-file with syntax description for Custom Highlighters
         /// </summary>
-        public string DescriptionFile { get; }
+        public string DescriptionFile { get; protected set; }
 
-        public SyntaxDescriptor SyntaxDescriptor { get; }
+        public SyntaxDescriptor SyntaxDescriptor { get; protected set; }
+
 
         //styles
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
@@ -204,46 +216,17 @@ namespace FastColoredTextBoxNS
         protected Regex VBNumberRegex;
         protected Regex VBStringRegex;
 
-        public static RegexOptions RegexCompiledOption
-        {
-            get
-            {
-                if (platformType == Platform.X86)
-                    return RegexOptions.Compiled;
-                else
-                    return RegexOptions.None;
-            }
+        public SyntaxHighlighter(string name = null) {
+            Name = !String.IsNullOrWhiteSpace(name) ? name : this.GetType().GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name ?? this.GetType().FullName;
+
+            InitStyleSchema();
         }
 
-        public SyntaxHighlighter(string name = Language.None, string descriptionFile = null) {
-            Name = name;
-
-            //Todo: Move into CustomSyntaxHighlighter
-            if (Name == Language.Custom) {
-                DescriptionFile = descriptionFile;
-                if (!string.IsNullOrWhiteSpace(DescriptionFile)) {
-                    var doc = new XmlDocument();
-                    string filepath = DescriptionFile;
-                    if (!File.Exists(filepath)) {
-                        filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filepath));
-                    }
-                    if (File.Exists(filepath)) {
-                        doc.LoadXml(File.ReadAllText(filepath));
-                        SyntaxDescriptor = ParseXmlDescription(doc);
-                    }
-                }
-            }
-
-            InitStyleSchema(Name);
-        }
-
-#region IDisposable Members
 
         public void Dispose()
         {
         }
 
-#endregion
 
         /// <summary>
         /// Highlights syntax for given language
@@ -290,27 +273,6 @@ namespace FastColoredTextBoxNS
                     break;
             }
         }
-
-        ///// <summary>
-        ///// Highlights syntax for given XML description file
-        ///// </summary>
-        //public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
-        //{
-        //    SyntaxDescriptor desc = null;
-        //    if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
-        //    {
-        //        var doc = new XmlDocument();
-        //        string file = XMLdescriptionFile;
-        //        if (!File.Exists(file))
-        //            file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
-
-        //        doc.LoadXml(File.ReadAllText(file));
-        //        desc = ParseXmlDescription(doc);
-        //        descByXMLfileNames[XMLdescriptionFile] = desc;
-        //    }
-
-        //    HighlightSyntax(desc, range);
-        //}
 
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
@@ -711,100 +673,8 @@ namespace FastColoredTextBoxNS
                     RegexCompiledOption);
         }
 
-        public void InitStyleSchema(string lang)
-        {
-            switch (lang)
-            {
-                case Language.CSharp:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    AttributeStyle = GreenStyle;
-                    ClassNameStyle = BoldStyle;
-                    KeywordStyle = BlueStyle;
-                    CommentTagStyle = GrayStyle;
-                    break;
-                case Language.VB:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    ClassNameStyle = BoldStyle;
-                    KeywordStyle = BlueStyle;
-                    break;
-                case Language.HTML:
-                    CommentStyle = GreenStyle;
-                    TagBracketStyle = BlueStyle;
-                    TagNameStyle = MaroonStyle;
-                    AttributeStyle = RedStyle;
-                    AttributeValueStyle = BlueStyle;
-                    HtmlEntityStyle = RedStyle;
-                    break;
-                case Language.XML:
-                    CommentStyle = GreenStyle;
-                    XmlTagBracketStyle = BlueStyle;
-                    XmlTagNameStyle = MaroonStyle;
-                    XmlAttributeStyle = RedStyle;
-                    XmlAttributeValueStyle = BlueStyle;
-                    XmlEntityStyle = RedStyle;
-                    XmlCDataStyle = BlackStyle;
-                    break;
-                case Language.JS:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueStyle;
-                    break;
-                case Language.Lua:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueBoldStyle;
-                    FunctionsStyle = MaroonStyle;
-                    break;
-                case Language.PHP:
-                    StringStyle = RedStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = RedStyle;
-                    VariableStyle = MaroonStyle;
-                    KeywordStyle = MagentaStyle;
-                    KeywordStyle2 = BlueStyle;
-                    KeywordStyle3 = GrayStyle;
-                    break;
-                case Language.SQL:
-                    StringStyle = RedStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueBoldStyle;
-                    StatementsStyle = BlueBoldStyle;
-                    FunctionsStyle = MaroonStyle;
-                    VariableStyle = MaroonStyle;
-                    TypesStyle = BrownStyle;
-                    break;
-                case Language.JSON:
-                    StringStyle = BrownStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueStyle;
-                    break;
-                case "CSharp2":
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MaroonStyle;
-                    AttributeStyle = GreenStyle;
-                    ClassNameStyle = MaroonStyle;
-                    KeywordStyle = BlueStyle;
-                    CommentTagStyle = GrayStyle;
-                    break;
-                case "CSharp3":
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = GrayStyle;
-                    AttributeStyle = GreenStyle;
-                    ClassNameStyle = BlackStyle;
-                    KeywordStyle = BlueStyle;
-                    CommentTagStyle = GrayStyle;
-                    break;
-            }
-        }
+        public virtual void InitStyleSchema() { }
+
 
         /// <summary>
         /// Highlights C# code

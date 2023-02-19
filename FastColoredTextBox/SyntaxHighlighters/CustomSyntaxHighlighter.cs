@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "None")]
     public class NoneSyntaxHighlighter : SyntaxHighlighter {
 
-        public NoneSyntaxHighlighter(params object[] args) : base(Language.None) {
+        public NoneSyntaxHighlighter() : base() {
         }
 
     }
@@ -15,79 +17,178 @@ namespace FastColoredTextBoxNS {
     [SyntaxHighlighter(Name = "CSharp")]
     public class CSharpSyntaxHighlighter : SyntaxHighlighter {
 
-        public CSharpSyntaxHighlighter(params object[] args) : base(Language.CSharp) {
+        public CSharpSyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MagentaStyle;
+            AttributeStyle = GreenStyle;
+            ClassNameStyle = BoldStyle;
+            KeywordStyle = BlueStyle;
+            CommentTagStyle = GrayStyle;
         }
 
     }
+
 
     [SyntaxHighlighter(Name = "VB")]
     public class VBSyntaxHighlighter : SyntaxHighlighter {
 
-        public VBSyntaxHighlighter(params object[] args) : base(Language.VB) {
+        public VBSyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MagentaStyle;
+            ClassNameStyle = BoldStyle;
+            KeywordStyle = BlueStyle;
         }
 
     }
+
 
     [SyntaxHighlighter(Name = "XML")]
     public class XMLSyntaxHighlighter : SyntaxHighlighter {
 
-        public XMLSyntaxHighlighter(params object[] args) : base(Language.XML) {
+        public XMLSyntaxHighlighter() : base() {
         }
 
+        public override void InitStyleSchema() {
+            CommentStyle = GreenStyle;
+            XmlTagBracketStyle = BlueStyle;
+            XmlTagNameStyle = MaroonStyle;
+            XmlAttributeStyle = RedStyle;
+            XmlAttributeValueStyle = BlueStyle;
+            XmlEntityStyle = RedStyle;
+            XmlCDataStyle = BlackStyle;
+        }
     }
+
 
     [SyntaxHighlighter(Name = "HTML")]
     public class HTMLSyntaxHighlighter : SyntaxHighlighter {
 
-        public HTMLSyntaxHighlighter(params object[] args) : base(Language.HTML) {
+        public HTMLSyntaxHighlighter() : base() {
         }
 
+        public override void InitStyleSchema() {
+            CommentStyle = GreenStyle;
+            TagBracketStyle = BlueStyle;
+            TagNameStyle = MaroonStyle;
+            AttributeStyle = RedStyle;
+            AttributeValueStyle = BlueStyle;
+            HtmlEntityStyle = RedStyle;
+        }
     }
+
 
     [SyntaxHighlighter(Name = "SQL")]
     public class SQLSyntaxHighlighter : SyntaxHighlighter {
 
-        public SQLSyntaxHighlighter(params object[] args) : base(Language.SQL) {
+        public SQLSyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = RedStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MagentaStyle;
+            KeywordStyle = BlueBoldStyle;
+            StatementsStyle = BlueBoldStyle;
+            FunctionsStyle = MaroonStyle;
+            VariableStyle = MaroonStyle;
+            TypesStyle = BrownStyle;
         }
 
     }
+
 
     [SyntaxHighlighter(Name = "PHP")]
     public class PHPSyntaxHighlighter : SyntaxHighlighter {
 
-        public PHPSyntaxHighlighter(params object[] args) : base(Language.PHP) {
+        public PHPSyntaxHighlighter() : base() {
         }
 
+        public override void InitStyleSchema() {
+            StringStyle = RedStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = RedStyle;
+            VariableStyle = MaroonStyle;
+            KeywordStyle = MagentaStyle;
+            KeywordStyle2 = BlueStyle;
+            KeywordStyle3 = GrayStyle;
+        }
     }
+
 
     [SyntaxHighlighter(Name = "JS")]
     public class JSSyntaxHighlighter : SyntaxHighlighter {
 
-        public JSSyntaxHighlighter(params object[] args) : base(Language.JS) {
+        public JSSyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MagentaStyle;
+            KeywordStyle = BlueStyle;
         }
 
     }
+
 
     [SyntaxHighlighter(Name = "JSON")]
     public class JSONSyntaxHighlighter : SyntaxHighlighter {
 
-        public JSONSyntaxHighlighter(params object[] args) : base(Language.JSON) {
+        public JSONSyntaxHighlighter() : base() {
         }
 
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            NumberStyle = MagentaStyle;
+            KeywordStyle = BlueStyle;
+        }
     }
+
 
     [SyntaxHighlighter(Name = "Lua")]
     public class LuaSyntaxHighlighter : SyntaxHighlighter {
 
-        public LuaSyntaxHighlighter(params object[] args) : base(Language.Lua) {
+        public LuaSyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MagentaStyle;
+            KeywordStyle = BlueBoldStyle;
+            FunctionsStyle = MaroonStyle;
         }
 
     }
 
+
     [SyntaxHighlighter(Name = "Custom", IsConfigurable = true)]
     public class CustomSyntaxHighlighter : SyntaxHighlighter {
 
-        public CustomSyntaxHighlighter(params object[] args) : base(Language.Custom, args[0] as string) {
+        public CustomSyntaxHighlighter(string descriptionFile = null) : base($"Custom:{descriptionFile}") {
+            
+            //Create the SyntaxDescriptor from descriptionFile
+            DescriptionFile = descriptionFile;
+            if (!string.IsNullOrWhiteSpace(DescriptionFile)) {
+                var doc = new XmlDocument();
+                string filepath = DescriptionFile;
+                if (!File.Exists(filepath)) {
+                    filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filepath));
+                }
+                if (File.Exists(filepath)) {
+                    doc.LoadXml(File.ReadAllText(filepath));
+                    SyntaxDescriptor = ParseXmlDescription(doc);
+                }
+            }
+
         }
 
     }

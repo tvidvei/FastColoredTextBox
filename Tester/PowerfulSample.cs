@@ -432,9 +432,19 @@ namespace Tester
     }
 
     [SyntaxHighlighter(Name = "CSharp2")]
-    public class CSharp2SyntaxHighlighter : SyntaxHighlighter {
+    public class CSharp2SyntaxHighlighter : CSharpSyntaxHighlighter {
 
-        public CSharp2SyntaxHighlighter(params object[] args) : base("CSharp2") {
+        public CSharp2SyntaxHighlighter() : base() {
+        }
+
+        public override void InitStyleSchema() {
+            StringStyle = BrownStyle;
+            CommentStyle = GreenStyle;
+            NumberStyle = MaroonStyle;
+            AttributeStyle = GreenStyle;
+            ClassNameStyle = MaroonStyle;
+            KeywordStyle = BlueStyle;
+            CommentTagStyle = GrayStyle;
         }
 
     }
