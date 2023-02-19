@@ -609,7 +609,7 @@
             Find a SyntaxHighlighter class with the given name in an assembly
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.GetHighlighter(System.String,System.String)">
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.GetHighlighter(System.String,System.String,System.String)">
             <summary>
             Factory method: Get or create a highlighter for a given language
             </summary>

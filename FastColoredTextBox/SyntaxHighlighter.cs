@@ -42,9 +42,17 @@ namespace FastColoredTextBoxNS
         /// </summary>
         /// <param name="langue">Language to implement highlighter for</param>
         /// <returns></returns>
-        public static SyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null) {
+        public static SyntaxHighlighter GetHighlighter(string name = Language.None, string descriptionFile = null, string library = null) {
             //string name = Convert.ToString(language); //Enum.GetName(typeof(Language), language);
-            var hltype = FindHighlighterType(Assembly.GetEntryAssembly(), name) ??
+            Assembly asm = null;
+            //library = "Highlighters";
+            try {
+                if (!String.IsNullOrWhiteSpace(library)) asm = Assembly.Load(library);
+            } catch (Exception ex) {
+                asm = null;
+            }
+            var hltype = FindHighlighterType(asm, name) ??
+                         FindHighlighterType(Assembly.GetEntryAssembly(), name) ??
                          FindHighlighterType(Assembly.GetCallingAssembly(), name) ??
                          FindHighlighterType(Assembly.GetExecutingAssembly(), name) ??
                          typeof(NoneSyntaxHighlighter);

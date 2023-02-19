@@ -991,20 +991,22 @@ namespace FastColoredTextBoxNS
             set { timer2.Interval = value; }
         }
 
+        private string syntaxHighlighterLibrary = null;
+
         /// <summary>
         /// XML file with description of syntax highlighting.
         /// This property works only with Language == Language.Custom.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(null)]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
         [Description(
-            "XML file with description of syntax highlighting. This property works only with Language == Language.Custom."
+            "Library (Assembly) containing SyntaxHighlighter classes to be used. Either short or long form of the assemblyName"
             )]
         public string SyntaxHighlighterAssemblies {
-            get { return SyntaxHighlighter.DescriptionFile; }
+            get { return syntaxHighlighterLibrary; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value);
+                syntaxHighlighterLibrary = value;
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, DescriptionFile, value);
                 Invalidate();
             }
         }
@@ -1026,7 +1028,7 @@ namespace FastColoredTextBoxNS
         {
             get { return SyntaxHighlighter.Name; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile);
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, SyntaxHighlighterAssemblies);
                 Invalidate();
             }
         }
@@ -1045,7 +1047,7 @@ namespace FastColoredTextBoxNS
         {
             get { return SyntaxHighlighter.DescriptionFile; }
             set {
-                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value);
+                SyntaxHighlighter = SyntaxHighlighter.GetHighlighter(Language, value, SyntaxHighlighterAssemblies);
                 Invalidate();
             }
         }
