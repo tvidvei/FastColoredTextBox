@@ -778,7 +778,7 @@ namespace FastColoredTextBoxNS
         public void SetStyle(StyleIndex styleLayer, string regexPattern, RegexOptions options)
         {
             if (Math.Abs(Start.iLine - End.iLine) > 1000)
-                options |= SyntaxHighlighter.RegexCompiledOption;
+                options |= SyntaxHighlighterBase.RegexCompiledOption;
             //
             foreach (var range in GetRanges(regexPattern, options))
                 range.SetStyle(styleLayer);
@@ -829,7 +829,7 @@ namespace FastColoredTextBoxNS
         /// <param name="finishFoldingPattern">Pattern for finish folding line</param>
         public void SetFoldingMarkers(string startFoldingPattern, string finishFoldingPattern)
         {
-            SetFoldingMarkers(startFoldingPattern, finishFoldingPattern, SyntaxHighlighter.RegexCompiledOption);
+            SetFoldingMarkers(startFoldingPattern, finishFoldingPattern, SyntaxHighlighterBase.RegexCompiledOption);
         }
 
         /// <summary>

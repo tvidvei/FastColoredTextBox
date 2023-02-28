@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "JSON")]
-    public class JSONSyntaxHighlighter : SyntaxHighlighter {
+    public class JSONSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex JSONKeywordRegex;
         public static readonly Regex JSONNumberRegex;
@@ -55,7 +55,7 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
+            StringStyle = BrownItalicStyle;
             NumberStyle = MagentaStyle;
             KeywordStyle = BlueStyle;
         }

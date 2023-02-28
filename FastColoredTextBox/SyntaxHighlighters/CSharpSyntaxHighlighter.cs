@@ -8,52 +8,57 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "CSharp")]
-    public class CSharpSyntaxHighlighter : SyntaxHighlighter {
+    public class CSharpSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex CSharpAttributeRegex, CSharpClassNameRegex;
         public static readonly Regex CSharpCommentRegex1, CSharpCommentRegex2, CSharpCommentRegex3;
         public static readonly Regex CSharpKeywordRegex;
         public static readonly Regex CSharpNumberRegex;
         public static readonly Regex CSharpStringRegex;
+        public static readonly Regex CSharpDirectiveRegex;  // Preprocessor directives
 
         static CSharpSyntaxHighlighter() {
-            //CSharpStringRegex = new Regex( @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", RegexCompiledOption);
+//            CSharpStringRegex = new Regex( @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", RegexCompiledOption);
 
-            CSharpStringRegex =
-                new Regex(
-                    @"
-# Character definitions:
-                            '
-                            (?> # disable backtracking
-                              (?:
-                                \\[^\r\n]|    # escaped meta char
-                                [^'\r\n]      # any character except '
-                              )*
-                            )
-                            '?
-                            |
-# Normal string & verbatim strings definitions:
-                            (?<verbatimIdentifier>@)?         # this group matches if it is an verbatim string
-                            ""
-                            (?> # disable backtracking
-                              (?:
-# match and consume an escaped character including escaped double quote ("") char
-                                (?(verbatimIdentifier)        # if it is a verbatim string ...
-                                  """"|                         #   then: only match an escaped double quote ("") char
-                                  \\.                         #   else: match an escaped sequence
-                                )
-                                | # OR
-            
-# match any char except double quote char ("")
-                                [^""]
-                              )*
-                            )
-                            ""
-                        ",
-                    RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace |
-                    RegexCompiledOption
-                    ); //thanks to rittergig for this regex
+            CSharpStringRegex = new Regex(@"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", 
+                RegexOptions.Singleline | RegexCompiledOption);
 
+            /*
+                        CSharpStringRegex =
+                            new Regex(
+                                @"
+            # Character definitions:
+                                        '
+                                        (?> # disable backtracking
+                                          (?:
+                                            \\[^\r\n]|    # escaped meta char
+                                            [^'\r\n]      # any character except '
+                                          )*
+                                        )
+                                        '?
+                                        |
+            # Normal string & verbatim strings definitions:
+                                        (?<verbatimIdentifier>@)?         # this group matches if it is an verbatim string
+                                        ""
+                                        (?> # disable backtracking
+                                          (?:
+            # match and consume an escaped character including escaped double quote ("") char
+                                            (?(verbatimIdentifier)        # if it is a verbatim string ...
+                                              """"|                         #   then: only match an escaped double quote ("") char
+                                              \\.                         #   else: match an escaped sequence
+                                            )
+                                            | # OR
+
+            # match any char except double quote char ("")
+                                            [^""]
+                                          )*
+                                        )
+                                        ""
+                                    ",
+                                RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace |
+                                RegexCompiledOption
+                                ); //thanks to rittergig for this regex
+            */
             CSharpCommentRegex1 = new Regex(@"//.*$", RegexOptions.Multiline | RegexCompiledOption);
             CSharpCommentRegex2 = new Regex(@"(/\*.*?\*/)|(/\*.*)", RegexOptions.Singleline | RegexCompiledOption);
             CSharpCommentRegex3 = new Regex(@"(/\*.*?\*/)|(.*\*/)",
@@ -64,7 +69,11 @@ namespace FastColoredTextBoxNS {
             CSharpClassNameRegex = new Regex(@"\b(class|struct|enum|interface)\s+(?<range>\w+?)\b", RegexCompiledOption);
             CSharpKeywordRegex =
                 new Regex(
-                    @"\b(abstract|add|alias|as|ascending|async|await|base|bool|break|by|byte|case|catch|char|checked|class|const|continue|decimal|default|delegate|descending|do|double|dynamic|else|enum|equals|event|explicit|extern|false|finally|fixed|float|for|foreach|from|get|global|goto|group|if|implicit|in|int|interface|internal|into|is|join|let|lock|long|nameof|namespace|new|null|object|on|operator|orderby|out|override|params|partial|private|protected|public|readonly|ref|remove|return|sbyte|sealed|select|set|short|sizeof|stackalloc|static|static|string|struct|switch|this|throw|true|try|typeof|uint|ulong|unchecked|unsafe|ushort|using|using|value|var|virtual|void|volatile|when|where|while|yield)\b|#region\b|#endregion\b",
+                    @"\b(abstract|add|alias|as|ascending|async|await|base|bool|break|by|byte|case|catch|char|checked|class|const|continue|decimal|default|delegate|descending|do|double|dynamic|else|enum|equals|event|explicit|extern|false|finally|fixed|float|for|foreach|from|get|global|goto|group|if|implicit|in|int|interface|internal|into|is|join|let|lock|long|nameof|namespace|new|null|object|on|operator|orderby|out|override|params|partial|private|protected|public|readonly|ref|remove|return|sbyte|sealed|select|set|short|sizeof|stackalloc|static|static|string|struct|switch|this|throw|true|try|typeof|uint|ulong|unchecked|unsafe|ushort|using|using|value|var|virtual|void|volatile|when|where|while|yield)\b",
+                    RegexCompiledOption);
+            CSharpDirectiveRegex =
+                new Regex(
+                    @"#(if|elif|else|endif|define|undef|warning|error|line|region|endregion|pragma)\b",
                     RegexCompiledOption);
         }
 
@@ -86,7 +95,7 @@ namespace FastColoredTextBoxNS {
 ^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);
 ";
             //clear style of changed range
-            range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
+            range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle, DirectiveStyle);
             //string highlighting
             range.SetStyle(StringStyle, CSharpStringRegex);
             //comment highlighting
@@ -101,6 +110,8 @@ namespace FastColoredTextBoxNS {
             range.SetStyle(ClassNameStyle, CSharpClassNameRegex);
             //keyword highlighting
             range.SetStyle(KeywordStyle, CSharpKeywordRegex);
+            //directive highlighting
+            range.SetStyle(DirectiveStyle, CSharpDirectiveRegex);
 
             //find document comments
             foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline)) {
@@ -167,13 +178,14 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = BrownItalicStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = MagentaStyle;
-            AttributeStyle = GreenStyle;
-            ClassNameStyle = BoldStyle;
+            AttributeStyle = GreenItalicStyle;
+            ClassNameStyle = BoldUnderlineStyle;
             KeywordStyle = BlueStyle;
             CommentTagStyle = GrayStyle;
+            DirectiveStyle = GrayStyle;
         }
 
 

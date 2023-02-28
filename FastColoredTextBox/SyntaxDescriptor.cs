@@ -35,7 +35,7 @@ namespace FastColoredTextBoxNS
             {
                 if (regex == null)
                 {
-                    regex = new Regex(pattern, SyntaxHighlighter.RegexCompiledOption | options);
+                    regex = new Regex(pattern, SyntaxHighlighterBase.RegexCompiledOption | options);
                 }
                 return regex;
             }

@@ -661,6 +661,11 @@
             Keyword style
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.DirectiveStyle">
+            <summary>
+            Compiler directive style
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.CommentTagStyle">
             <summary>
             Style of tags in comments of C#

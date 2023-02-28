@@ -139,8 +139,7 @@
 </value>
   </data>
   <data name="fctb.Text" xml:space="preserve">
-    <value>
-    #region Char
+    <value>#region Char
 
     /// &lt;summary&gt;
     /// Char and style
@@ -150,15 +149,17 @@
         public char c;
         public double Usage;
         public StyleIndex style;
+        public string Message;
 
         public Char(char c)
         {
             this.c = c;
             Usage = 28.592;
             style = StyleIndex.None;
+            Message = "Hei på dere"
         }
     }
-    #endregion
+#endregion
 </value>
   </data>
 </root>

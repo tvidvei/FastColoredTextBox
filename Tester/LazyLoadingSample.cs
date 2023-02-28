@@ -57,7 +57,7 @@ namespace Tester
             //
             range.ClearStyle(StyleIndex.All);
             range.SetStyle(fctb.HighlighterBase.BlueStyle, @"N\d+");
-            range.SetStyle(fctb.HighlighterBase.RedStyle, @"[+\-]?[\d\.]+\d+");
+            range.SetStyle(fctb.HighlighterBase.DarkRedStyle, @"[+\-]?[\d\.]+\d+");
         }
 
         private void closeFileToolStripMenuItem_Click(object sender, EventArgs e)

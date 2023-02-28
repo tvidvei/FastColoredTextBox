@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "HTML")]
-    public class HTMLSyntaxHighlighter : SyntaxHighlighter {
+    public class HTMLSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex HTMLAttrRegex, HTMLAttrValRegex, HTMLCommentRegex1, HTMLCommentRegex2;
         public static readonly Regex HTMLEndTagRegex;
@@ -83,12 +83,12 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            CommentStyle = GreenStyle;
+            CommentStyle = GreenItalicStyle;
             TagBracketStyle = BlueStyle;
             TagNameStyle = MaroonStyle;
-            AttributeStyle = RedStyle;
+            AttributeStyle = DarkRedStyle;
             AttributeValueStyle = BlueStyle;
-            HtmlEntityStyle = RedStyle;
+            HtmlEntityStyle = DarkRedStyle;
         }
     }
 

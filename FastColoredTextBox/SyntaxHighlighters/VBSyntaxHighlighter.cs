@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "VB")]
-    public class VBSyntaxHighlighter : SyntaxHighlighter {
+    public class VBSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex VBClassNameRegex;
         public static readonly Regex VBCommentRegex;
@@ -117,10 +117,10 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = BrownItalicStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = MagentaStyle;
-            ClassNameStyle = BoldStyle;
+            ClassNameStyle = BoldUnderlineStyle;
             KeywordStyle = BlueStyle;
         }
 

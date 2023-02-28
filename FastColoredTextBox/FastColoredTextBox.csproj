@@ -86,7 +86,7 @@
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
     <Compile Include="SyntaxDescriptor.cs" />
-    <Compile Include="SyntaxHighlighter.cs" />
+    <Compile Include="SyntaxHighlighterBase.cs" />
     <Compile Include="ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -10,7 +10,7 @@ using System.Xml;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "Custom", IsConfigurable = true)]
-    public class CustomSyntaxHighlighter : SyntaxHighlighter {
+    public class CustomSyntaxHighlighter : SyntaxHighlighterBase {
 
         public SyntaxDescriptor SyntaxDescriptor { get; protected set; }
 

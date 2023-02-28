@@ -357,13 +357,13 @@ namespace Tester
             var styles = new Style[] { 
                 fctb.HighlighterBase.BlueBoldStyle, 
                 fctb.HighlighterBase.BlueStyle, 
-                fctb.HighlighterBase.BoldStyle, 
-                fctb.HighlighterBase.BrownStyle, 
+                fctb.HighlighterBase.BoldUnderlineStyle, 
+                fctb.HighlighterBase.BrownItalicStyle, 
                 fctb.HighlighterBase.GrayStyle, 
-                fctb.HighlighterBase.GreenStyle, 
+                fctb.HighlighterBase.GreenItalicStyle, 
                 fctb.HighlighterBase.MagentaStyle, 
                 fctb.HighlighterBase.MaroonStyle, 
-                fctb.HighlighterBase.RedStyle 
+                fctb.HighlighterBase.DarkRedStyle 
             };
             fctb.HighlighterBase.AttributeStyle = styles[rnd.Next(styles.Length)];
             fctb.HighlighterBase.ClassNameStyle = styles[rnd.Next(styles.Length)];
@@ -438,13 +438,14 @@ namespace Tester
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
+            StringStyle = DarkRedStyle;
             CommentStyle = GreenStyle;
-            NumberStyle = MaroonStyle;
-            AttributeStyle = GreenStyle;
-            ClassNameStyle = MaroonStyle;
+            NumberStyle = BlackStyle;
+            AttributeStyle = BlackStyle;
+            ClassNameStyle = DarkCyanStyle;
             KeywordStyle = BlueStyle;
             CommentTagStyle = GrayStyle;
+            DirectiveStyle = GrayStyle;
         }
 
     }

@@ -167,7 +167,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            Highlighter = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.None);
+            Highlighter = SyntaxHighlighterBase.GetHighlighter(FastColoredTextBoxNS.Language.None);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -1006,7 +1006,7 @@ Either short or long form of the assembly names separated by ';'. "
             get { return highlighterLibraries; }
             set {
                 highlighterLibraries = value;
-                Highlighter = SyntaxHighlighter.GetHighlighter(Language, DescriptionFile, value);
+                Highlighter = SyntaxHighlighterBase.GetHighlighter(Language, DescriptionFile, value);
                 Invalidate();
             }
         }
@@ -1022,7 +1022,7 @@ Either short or long form of the assembly names separated by ';'. "
         /// Ad-hoc solution to have Test-cases to work until updated
         /// Todo: To be removed when issues with testcases are solved
         /// </summary>
-        public SyntaxHighlighter HighlighterBase => Highlighter as SyntaxHighlighter;
+        public SyntaxHighlighterBase HighlighterBase => Highlighter as SyntaxHighlighterBase;
 
         /// <summary>
         /// Language for highlighting by built-in highlighter.
@@ -1034,7 +1034,7 @@ Either short or long form of the assembly names separated by ';'. "
         {
             get { return Highlighter.Name; }
             set {
-                Highlighter = SyntaxHighlighter.GetHighlighter(value, DescriptionFile, HighlighterLibraries);
+                Highlighter = SyntaxHighlighterBase.GetHighlighter(value, DescriptionFile, HighlighterLibraries);
                 Invalidate();
             }
         }
@@ -1053,7 +1053,7 @@ Either short or long form of the assembly names separated by ';'. "
         {
             get { return Highlighter.DescriptionFile; }
             set {
-                Highlighter = SyntaxHighlighter.GetHighlighter(Language, value, HighlighterLibraries);
+                Highlighter = SyntaxHighlighterBase.GetHighlighter(Language, value, HighlighterLibraries);
                 Invalidate();
             }
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "JS")]
-    public class JSSyntaxHighlighter : SyntaxHighlighter {
+    public class JSSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex JScriptCommentRegex1, JScriptCommentRegex2, JScriptCommentRegex3;
         public static readonly Regex JScriptKeywordRegex;
@@ -106,8 +106,8 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = BrownItalicStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = MagentaStyle;
             KeywordStyle = BlueStyle;
         }

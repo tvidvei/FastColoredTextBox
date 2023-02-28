@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "PHP")]
-    public class PHPSyntaxHighlighter : SyntaxHighlighter {
+    public class PHPSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex PHPCommentRegex1, PHPCommentRegex2, PHPCommentRegex3;
         public static readonly Regex PHPKeywordRegex1, PHPKeywordRegex2, PHPKeywordRegex3;
@@ -110,9 +110,9 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = RedStyle;
-            CommentStyle = GreenStyle;
-            NumberStyle = RedStyle;
+            StringStyle = DarkRedStyle;
+            CommentStyle = GreenItalicStyle;
+            NumberStyle = DarkRedStyle;
             VariableStyle = MaroonStyle;
             KeywordStyle = MagentaStyle;
             KeywordStyle2 = BlueStyle;

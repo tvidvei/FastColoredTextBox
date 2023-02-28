@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "SQL")]
-    public class SQLSyntaxHighlighter : SyntaxHighlighter {
+    public class SQLSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex SQLCommentRegex1, SQLCommentRegex2, SQLCommentRegex3, SQLCommentRegex4;
         public static readonly Regex SQLFunctionsRegex;
@@ -84,14 +84,14 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = RedStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = DarkRedStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = MagentaStyle;
             KeywordStyle = BlueBoldStyle;
             StatementsStyle = BlueBoldStyle;
             FunctionsStyle = MaroonStyle;
             VariableStyle = MaroonStyle;
-            TypesStyle = BrownStyle;
+            TypesStyle = BrownItalicStyle;
         }
 
     }

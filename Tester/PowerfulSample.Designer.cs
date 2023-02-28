@@ -486,7 +486,7 @@ namespace Tester
             this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
     "(?<range>:)\\s*(?<range>[^;]+);";
             this.fctb.AutoIndentExistingLines = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 315);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 330);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fctb.CharHeight = 15;
@@ -498,6 +498,7 @@ namespace Tester
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.HighlighterLibraries = "Highlighters";
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 24);
@@ -508,7 +509,6 @@ namespace Tester
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
             this.fctb.Size = new System.Drawing.Size(346, 311);
-            this.fctb.HighlighterLibraries = "Highlighters";
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.Zoom = 100;

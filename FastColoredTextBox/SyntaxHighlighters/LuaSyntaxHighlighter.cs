@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FastColoredTextBoxNS {
 
     [SyntaxHighlighter(Name = "Lua")]
-    public class LuaSyntaxHighlighter : SyntaxHighlighter {
+    public class LuaSyntaxHighlighter : SyntaxHighlighterBase {
 
         public static readonly Regex LuaCommentRegex1, LuaCommentRegex2, LuaCommentRegex3;
         public static readonly Regex LuaKeywordRegex;
@@ -101,8 +101,8 @@ namespace FastColoredTextBoxNS {
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = BrownItalicStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = MagentaStyle;
             KeywordStyle = BlueBoldStyle;
             FunctionsStyle = MaroonStyle;

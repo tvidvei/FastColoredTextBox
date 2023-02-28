@@ -15,10 +15,10 @@ namespace Highlighters
         }
 
         public override void InitStyleSchema() {
-            StringStyle = BrownStyle;
-            CommentStyle = GreenStyle;
+            StringStyle = BrownItalicStyle;
+            CommentStyle = GreenItalicStyle;
             NumberStyle = GrayStyle;
-            AttributeStyle = GreenStyle;
+            AttributeStyle = GreenItalicStyle;
             ClassNameStyle = BlackStyle;
             KeywordStyle = BlueStyle;
             CommentTagStyle = GrayStyle;

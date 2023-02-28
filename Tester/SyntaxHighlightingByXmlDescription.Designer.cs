@@ -33,7 +33,7 @@ namespace Tester
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            ISyntaxHighlighter syntaxHighlighter1 = SyntaxHighlighter.GetHighlighter(FastColoredTextBoxNS.Language.Custom, "htmlDesc.xml");
+            ISyntaxHighlighter syntaxHighlighter1 = SyntaxHighlighterBase.GetHighlighter(FastColoredTextBoxNS.Language.Custom, "htmlDesc.xml");
             this.SuspendLayout();
             // 
             // label1

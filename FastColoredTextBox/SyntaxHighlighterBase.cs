@@ -45,7 +45,7 @@ namespace FastColoredTextBoxNS
 
     }
 
-    public abstract class SyntaxHighlighter : ISyntaxHighlighter {
+    public abstract class SyntaxHighlighterBase : ISyntaxHighlighter {
 
         public static RegexOptions RegexCompiledOption {
             get {
@@ -104,10 +104,10 @@ namespace FastColoredTextBoxNS
                     }
 
                     if (hltype.GetCustomAttribute<SyntaxHighlighterAttribute>().IsConfigurable) {
-                        result = Activator.CreateInstance(hltype, descriptionFile) as SyntaxHighlighter;
+                        result = Activator.CreateInstance(hltype, descriptionFile) as SyntaxHighlighterBase;
                         Highlighters[(name, descriptionFile, libraries)] = result;
                     } else {
-                        result = Activator.CreateInstance(hltype) as SyntaxHighlighter;
+                        result = Activator.CreateInstance(hltype) as SyntaxHighlighterBase;
                         Highlighters[(name, "*", libraries)] = result;
                     }
 
@@ -126,7 +126,7 @@ namespace FastColoredTextBoxNS
         public string DescriptionFile { get; protected set; }
 
 
-        public SyntaxHighlighter(string name = null) {
+        public SyntaxHighlighterBase(string name = null) {
             Name = !String.IsNullOrWhiteSpace(name) ? name : this.GetType().GetCustomAttribute<SyntaxHighlighterAttribute>()?.Name ?? this.GetType().FullName;
 
             InitStyleSchema();
@@ -144,8 +144,6 @@ namespace FastColoredTextBoxNS
         public virtual void HighlightSyntax(Range range) { }
 
 
-        //public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args) { }
-
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args) {
             var tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
@@ -158,13 +156,16 @@ namespace FastColoredTextBoxNS
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
         public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
         public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        public readonly Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
+        public readonly Style BoldUnderlineStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
+        public readonly Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
+        public readonly Style BrownItalicStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
         public readonly Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        public readonly Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
+        public readonly Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
+        public readonly Style GreenItalicStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         public readonly Style MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
         public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
-        public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        public readonly Style DarkRedStyle = new TextStyle(Brushes.DarkRed, null, FontStyle.Regular);
+        public readonly Style DarkCyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Regular);
         public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
 
         protected readonly List<Style> resilientStyles = new List<Style>(5);
@@ -200,6 +201,11 @@ namespace FastColoredTextBoxNS
         /// Keyword style
         /// </summary>
         public Style KeywordStyle { get; set; }
+
+        /// <summary>
+        /// Compiler directive style
+        /// </summary>
+        public Style DirectiveStyle { get; set; }
 
         /// <summary>
         /// Style of tags in comments of C#

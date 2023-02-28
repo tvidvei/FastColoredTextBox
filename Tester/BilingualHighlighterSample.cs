@@ -21,8 +21,8 @@ namespace Tester
         {
             InitializeComponent();
 
-            HTMLHighlighter = SyntaxHighlighter.GetHighlighter("HTML");
-            PHPHighlighter = SyntaxHighlighter.GetHighlighter("PHP");
+            HTMLHighlighter = SyntaxHighlighterBase.GetHighlighter("HTML");
+            PHPHighlighter = SyntaxHighlighterBase.GetHighlighter("PHP");
         }
 
 
