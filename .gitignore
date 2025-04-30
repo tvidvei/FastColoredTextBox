@@ -18,6 +18,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+[Bb]inary/
 
 # VS2017 database files
 **/.vs/
